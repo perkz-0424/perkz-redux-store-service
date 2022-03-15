@@ -1,11 +1,12 @@
 {
   "name": "perkz",
-  "version": "0.0.4",
+  "version": "0.1.1",
   "description": "",
-  "main": "index.ts",
+  "main": "",
+  "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js"
+    "build": "tsc",
+    "release": "tsc && npm publish"
   },
   "author": "perkz",
   "license": "ISC",

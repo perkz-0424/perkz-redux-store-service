@@ -10,8 +10,14 @@ import {
 } from "react-router-dom";
 
 import {Provider, connect} from "react-redux";
+
 import thunk from "redux-thunk";
+
 import {createStore, combineReducers, applyMiddleware, Store} from "redux";
+
+export {createStore, combineReducers, applyMiddleware, Store} from "redux";
+
+export {Provider, connect} from "react-redux";
 
 export class RouteOptions {
   path!: string;
@@ -196,8 +202,6 @@ export const CreateRouter = (props: { routers: Array<RouteOptions> }) => {
   );
 };
 
-/*******路由******/
-
 
 /*******数据流仓库******/
 
@@ -240,8 +244,6 @@ const createReducers = (reducers: StoreStores): StoreReducers => {
 
 // 创建数据仓库
 export const createStores = (stores: StoreStores): Store => createStore(combineReducers(createReducers({...stores})), applyMiddleware(thunk));
-
-/*******数据流仓库******/
 
 
 

@@ -23,6 +23,8 @@ export {createStores} from "./src/main/createStores";
 
 export {CreateRouter} from "./src/main/createRouter";
 
+export {Service} from "./src/main/createService";
+
 export default (props: { store: Store, routers: Array<RouteOptions> }): React.ReactElement => {
   return (
     <React.Fragment>

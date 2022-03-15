@@ -12,17 +12,7 @@ import {
 } from "react-router-dom";
 import {createStores} from "../createStores";
 
-const getSearchToParams = (search?: string) => {
-  const params: any = {};
-  if (search) {
-    const a = (search.replace("?", "")).split("&");
-    a.forEach((item) => {
-      const keyValue = item.split("=");
-      params[keyValue[0]] = decodeURI(keyValue[1]);
-    });
-  }
-  return params;
-};
+import {getSearchToParams} from "../../common";
 
 // path 重写
 const getPath = (item: RouteOptions) => {

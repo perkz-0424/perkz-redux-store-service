@@ -81,3 +81,7 @@ export interface IReactHooksComponent<T = { [key: string]: any }> {
 }
 
 export type IAuth = (Component: (props: { [key: string]: any }) => React.ReactElement) => ((props: { [key: string]: any }) => React.ReactElement)
+
+export type Data = {
+  [key: string]: number | string | undefined | null
+}

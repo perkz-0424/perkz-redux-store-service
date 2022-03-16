@@ -2,7 +2,7 @@ import {getParamsToSearch} from "../../common";
 import {Data} from "../../type";
 
 
-export class Service<T = any> {
+export class F<T = any> {
   // 请求体参数
   private options: RequestInit = {
     credentials: "include"
@@ -43,7 +43,7 @@ export class Service<T = any> {
     });
   };
 
-  // 参数在url上
+  // 参数在 url上
   private modeA = (method: string, url: string, data: Data) => {
     const search = getParamsToSearch(data);
     const _url = search ? `${url}?${search}` : url;
@@ -53,21 +53,21 @@ export class Service<T = any> {
     ]);
   };
 
-  // 参数在body
+  // 参数在 body
   private modeB = (method: string, url: string, data: Data) => {
-    return Promise.race([this.fetch(url, {...this.options, method, body: JSON.stringify(data)}),  this.timeOut()])
+    return Promise.race([this.fetch(url, {...this.options, method, body: JSON.stringify(data)}), this.timeOut()]);
   };
 
-  // get请求
+  // get 请求
   public get = (url: string, data: Data) => this.modeA("GET", url, data);
 
-  // post请求
+  // post 请求
   public post = (url: string, data: Data) => this.modeB("POST", url, data);
 
   // put 请求
   public put = (url: string, data: Data) => this.modeB("PUT", url, data);
 
-  // delete请求
+  // delete 请求
   public delete = (url: string, data: Data) => this.modeA("DELETE", url, data);
 
   // 终止请求
@@ -77,5 +77,4 @@ export class Service<T = any> {
     return this;
   };
 }
-
 

@@ -2,7 +2,7 @@ import {getParamsToSearch} from "../../common";
 import {Data} from "../../type";
 
 
-export class F<T = any> {
+export class Service<T = any> {
   // 请求体参数
   private options: RequestInit = {
     credentials: "include"

@@ -13,44 +13,49 @@ export class Service<T = any> {
 
   private controller = new AbortController();
 
-  constructor(private headers: HeadersInit = {}, private timeout: number = 10) {
+  constructor(private headers: HeadersInit = {}, private timeout: number = 10000) {
     this.options.headers = headers;
   }
 
-  private fetch = (url: string, options: RequestInit) => new Promise((resolve, reject) => {
-    fetch(url, {
-      ...options,
-      signal: this.controller.signal
-    }).then((res) => {
-      this.timer && clearTimeout(this.timer);
-      try {
-        res.json().then((res: T) => resolve(res));
-      } catch (e) {
-        return reject(e);
-      }
-    }).catch((e) => {
-      this.timer && clearTimeout(this.timer);
-      return reject(e);
-    });
+  private timeOut = () => new Promise((resolve, reject) => {
+    this.timer = setTimeout(() => {
+      this.abort();
+      reject();
+    }, this.timeout);
   });
+
+  private fetch = (url: string, options: RequestInit) => {
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        ...options,
+        signal: this.controller.signal
+      }).then((res) => {
+        this.timer && clearTimeout(this.timer);
+        try {
+          res.json().then((res: T) => resolve(res));
+        } catch (e) {
+          return reject(e);
+        }
+      }).catch((e) => {
+        this.timer && clearTimeout(this.timer);
+        return reject(e);
+      });
+    });
+  };
 
   // 参数在url上
   private modeA = (method: string, url: string, data: Data) => {
     const search = getParamsToSearch(data);
     const _url = search ? `${url}?${search}` : url;
-    return this.fetch(_url, {
-      ...this.options,
-      method
-    });
+    return Promise.race([
+      this.fetch(_url, {...this.options, method}),
+      this.timeOut()
+    ]);
   };
 
   // 参数在body
   private modeB = (method: string, url: string, data: Data) => {
-    return this.fetch(url, {
-      ...this.options,
-      method,
-      body: JSON.stringify(data)
-    });
+    return Promise.race([this.fetch(url, {...this.options, method, body: JSON.stringify(data)}),  this.timeOut()])
   };
 
   // get请求
@@ -68,6 +73,7 @@ export class Service<T = any> {
   // 终止请求
   public abort = () => {
     this.controller.abort();
+    this.controller = new AbortController();
     return this;
   };
 }
